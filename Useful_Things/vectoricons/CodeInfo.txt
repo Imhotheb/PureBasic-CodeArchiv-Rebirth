@@ -1,0 +1,7 @@
+;   Description: A collection of icons created via the vector library from PB (incl. source code)
+;        Author: davido, Oma, StarBootics, infratec, Little John
+;          Date: 2017-03-08
+;            OS: Windows, Linux, Mac
+; English-Forum: http://www.purebasic.fr/english/viewtopic.php?f=12&t=65091
+;  French-Forum: 
+;  German-Forum: 

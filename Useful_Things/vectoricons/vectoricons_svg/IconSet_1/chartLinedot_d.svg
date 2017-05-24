@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="32pt" height="32pt" viewBox="0 0 32 32" version="1.1">
+<g id="surface8062">
+<path style="fill:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke:rgb(41.176471%,41.176471%,41.176471%);stroke-opacity:1;stroke-miterlimit:10;" d="M 0 0 L 0 32 M 0 0 L 2 0 M 0 8 L 2 8 M 0 16 L 2 16 M 0 24 L 2 24 M 0 32 L 2 32 "/>
+<path style="fill:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke:rgb(41.176471%,41.176471%,41.176471%);stroke-opacity:1;stroke-miterlimit:10;" d="M 0 -0.000000000000003553 L -0.000000000000007105 32 M 0 -0.000000000000003553 L 2 -0.000000000000003185 M 0 8 L 2 8 M 0 16 L 2 16 M -0.000000000000007105 24 L 2 24 M -0.000000000000007105 32 L 2 32 " transform="matrix(-0.000000000000000184,-1,1,-0.000000000000000184,0.000000000000003553,32)"/>
+<path style="fill:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke:rgb(75.294118%,75.294118%,75.294118%);stroke-opacity:1;stroke-miterlimit:10;" d="M 4 16 L 8 7 L 16 15 L 24 8 L 30 22 "/>
+<path style=" stroke:none;fill-rule:evenodd;fill:rgb(75.294118%,75.294118%,75.294118%);fill-opacity:1;" d="M 6 16 C 6 18.667969 2 18.667969 2 16 C 2 13.332031 6 13.332031 6 16 Z M 10 7 C 10 9.667969 6 9.667969 6 7 C 6 4.332031 10 4.332031 10 7 Z M 18 15 C 18 17.667969 14 17.667969 14 15 C 14 12.332031 18 12.332031 18 15 Z M 26 8 C 26 10.667969 22 10.667969 22 8 C 22 5.332031 26 5.332031 26 8 Z M 32 22 C 32 24.667969 28 24.667969 28 22 C 28 19.332031 32 19.332031 32 22 Z M 32 22 "/>
+<path style="fill:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke:rgb(75.294118%,75.294118%,75.294118%);stroke-opacity:1;stroke-miterlimit:10;" d="M 4 24 L 8 19 L 16 20 L 24 24 L 30 12 "/>
+<path style=" stroke:none;fill-rule:evenodd;fill:rgb(75.294118%,75.294118%,75.294118%);fill-opacity:1;" d="M 6 24 C 6 26.667969 2 26.667969 2 24 C 2 21.332031 6 21.332031 6 24 Z M 10 19 C 10 21.667969 6 21.667969 6 19 C 6 16.332031 10 16.332031 10 19 Z M 18 20 C 18 22.667969 14 22.667969 14 20 C 14 17.332031 18 17.332031 18 20 Z M 26 24 C 26 26.667969 22 26.667969 22 24 C 22 21.332031 26 21.332031 26 24 Z M 32 12 C 32 14.667969 28 14.667969 28 12 C 28 9.332031 32 9.332031 32 12 Z M 32 12 "/>
+</g>
+</svg>

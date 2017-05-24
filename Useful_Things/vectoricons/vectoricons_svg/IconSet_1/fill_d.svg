@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="32pt" height="32pt" viewBox="0 0 32 32" version="1.1">
+<g id="surface7746">
+<path style=" stroke:none;fill-rule:evenodd;fill:rgb(75.294118%,75.294118%,75.294118%);fill-opacity:1;" d="M 29 26 C 29 29.332031 24 29.332031 24 26 "/>
+<path style=" stroke:none;fill-rule:evenodd;fill:rgb(75.294118%,75.294118%,75.294118%);fill-opacity:1;" d="M 25.511719 23 C 25.511719 21.679688 27.488281 21.679688 27.488281 23 "/>
+<path style=" stroke:none;fill-rule:evenodd;fill:rgb(75.294118%,75.294118%,75.294118%);fill-opacity:1;" d="M 25.5 23 L 24 26 L 29 26 L 27.5 23 Z M 25.5 23 "/>
+<path style="fill:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke:rgb(75.294118%,75.294118%,75.294118%);stroke-opacity:1;stroke-miterlimit:10;" d="M 26.800781 18.75 C 27.214844 19.46875 26.96875 20.386719 26.25 20.800781 "/>
+<path style=" stroke:none;fill-rule:evenodd;fill:rgb(75.294118%,75.294118%,75.294118%);fill-opacity:1;" d="M 20.597656 22.71875 L 16.707031 26.605469 C 15.925781 27.386719 14.660156 27.386719 13.878906 26.605469 L 5.394531 18.121094 C 4.613281 17.339844 4.613281 16.074219 5.394531 15.292969 L 13.171875 7.515625 C 13.953125 6.734375 15.21875 6.734375 16 7.515625 L 24.484375 16 C 25.265625 16.78125 25.265625 18.046875 24.484375 18.828125 Z M 20.597656 22.71875 "/>
+<path style="fill:none;stroke-width:3;stroke-linecap:butt;stroke-linejoin:round;stroke:rgb(75.294118%,75.294118%,75.294118%);stroke-opacity:1;stroke-miterlimit:10;" d="M 19.999573 11.497719 L 25.001801 11.500481 L 19.999573 15.000107 Z M 19.999573 11.497719 " transform="matrix(0.707107,0.707107,-0.707107,0.707107,16,-6.627417)"/>
+<path style="fill:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke:rgb(75.294118%,75.294118%,75.294118%);stroke-opacity:1;stroke-miterlimit:10;" d="M 15 8 C 15 11.3125 13.65625 14 12 14 C 10.34375 14 9 11.3125 9 8 C 9 4.6875 10.34375 2 12 2 C 13.65625 2 15 4.6875 15 8 Z M 15 8 "/>
+</g>
+</svg>

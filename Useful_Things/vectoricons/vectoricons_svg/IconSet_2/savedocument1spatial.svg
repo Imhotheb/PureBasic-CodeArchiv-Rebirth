@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="32pt" height="32pt" viewBox="0 0 32 32" version="1.1">
+<defs>
+<linearGradient id="linear0" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="32" y2="0" >
+<stop offset="0" style="stop-color:rgb(85.098039%,85.098039%,85.098039%);stop-opacity:1;"/>
+<stop offset="0.55" style="stop-color:rgb(100%,100%,100%);stop-opacity:1;"/>
+<stop offset="1" style="stop-color:rgb(85.098039%,85.098039%,85.098039%);stop-opacity:1;"/>
+</linearGradient>
+<linearGradient id="linear1" gradientUnits="userSpaceOnUse" x1="4" y1="4" x2="28" y2="31" >
+<stop offset="0" style="stop-color:rgb(11.764706%,56.470588%,100%);stop-opacity:1;"/>
+<stop offset="1" style="stop-color:rgb(3.529412%,16.862745%,29.803922%);stop-opacity:1;"/>
+</linearGradient>
+<linearGradient id="linear2" gradientUnits="userSpaceOnUse" x1="8" y1="9" x2="16" y2="26" >
+<stop offset="0" style="stop-color:rgb(11.764706%,56.470588%,100%);stop-opacity:1;"/>
+<stop offset="1" style="stop-color:rgb(4.705882%,22.745098%,40%);stop-opacity:1;"/>
+</linearGradient>
+<linearGradient id="linear3" gradientUnits="userSpaceOnUse" x1="8" y1="9" x2="16" y2="26" >
+<stop offset="0" style="stop-color:rgb(11.764706%,56.470588%,100%);stop-opacity:1;"/>
+<stop offset="1" style="stop-color:rgb(4.705882%,22.745098%,40%);stop-opacity:1;"/>
+</linearGradient>
+</defs>
+<g id="surface8582">
+<path style=" stroke:none;fill-rule:evenodd;fill:rgb(50.196078%,50.196078%,50.196078%);fill-opacity:1;" d="M 5 5 L 29 5 L 29 32 L 5 32 Z M 5 5 "/>
+<path style="fill-rule:evenodd;fill:url(#linear0);stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke:url(#linear1);stroke-miterlimit:10;" d="M 4 4 L 28 4 L 28 31 L 4 31 Z M 4 4 "/>
+<path style=" stroke:none;fill-rule:evenodd;fill:url(#linear2);" d="M 8 18 L 16 26 L 24 18 Z M 8 18 "/>
+<path style="fill:none;stroke-width:6;stroke-linecap:butt;stroke-linejoin:miter;stroke:url(#linear3);stroke-miterlimit:10;" d="M 16 9 L 16 18 "/>
+</g>
+</svg>

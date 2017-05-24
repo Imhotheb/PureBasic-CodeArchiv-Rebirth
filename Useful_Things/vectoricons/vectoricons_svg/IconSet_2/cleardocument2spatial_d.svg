@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="32pt" height="32pt" viewBox="0 0 32 32" version="1.1">
+<defs>
+<linearGradient id="linear0" gradientUnits="userSpaceOnUse" x1="0" y1="2" x2="0" y2="30" >
+<stop offset="0" style="stop-color:rgb(96.078431%,96.078431%,96.078431%);stop-opacity:1;"/>
+<stop offset="1" style="stop-color:rgb(81.568627%,81.568627%,81.568627%);stop-opacity:1;"/>
+</linearGradient>
+<linearGradient id="linear1" gradientUnits="userSpaceOnUse" x1="4" y1="2" x2="28" y2="30" >
+<stop offset="0" style="stop-color:rgb(75.294118%,75.294118%,75.294118%);stop-opacity:1;"/>
+<stop offset="1" style="stop-color:rgb(30.196078%,30.196078%,30.196078%);stop-opacity:1;"/>
+</linearGradient>
+<linearGradient id="linear2" gradientUnits="userSpaceOnUse" x1="4" y1="2" x2="28" y2="30" >
+<stop offset="0" style="stop-color:rgb(75.294118%,75.294118%,75.294118%);stop-opacity:1;"/>
+<stop offset="1" style="stop-color:rgb(30.196078%,30.196078%,30.196078%);stop-opacity:1;"/>
+</linearGradient>
+<linearGradient id="linear3" gradientUnits="userSpaceOnUse" x1="7" y1="13" x2="25" y2="27" >
+<stop offset="0" style="stop-color:rgb(66.27451%,66.27451%,66.27451%);stop-opacity:1;"/>
+<stop offset="1" style="stop-color:rgb(26.666667%,26.666667%,26.666667%);stop-opacity:1;"/>
+</linearGradient>
+</defs>
+<g id="surface9038">
+<path style=" stroke:none;fill-rule:evenodd;fill:rgb(72.156863%,72.156863%,72.156863%);fill-opacity:1;" d="M 17.5 3.5 L 23.5 3.5 L 29.5 9.5 L 29.5 28.5 C 29.5 30.15625 28.15625 31.5 26.5 31.5 L 8.5 31.5 C 6.84375 31.5 5.5 30.15625 5.5 28.5 L 5.5 6.5 C 5.5 4.84375 6.84375 3.5 8.5 3.5 Z M 17.5 3.5 "/>
+<path style="fill-rule:evenodd;fill:url(#linear0);stroke-width:1;stroke-linecap:butt;stroke-linejoin:bevel;stroke:url(#linear1);stroke-miterlimit:10;" d="M 16 2 L 22 2 L 28 8 L 28 28 C 28 29.105469 27.105469 30 26 30 L 6 30 C 4.894531 30 4 29.105469 4 28 L 4 4 C 4 2.894531 4.894531 2 6 2 Z M 16 2 "/>
+<path style="fill:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:bevel;stroke:url(#linear2);stroke-miterlimit:10;" d="M 22 2 L 22 8 L 28 8 "/>
+<path style=" stroke:none;fill-rule:evenodd;fill:url(#linear3);" d="M 7 19 L 13 13 L 25 13 L 25 25 L 13 25 Z M 7 19 "/>
+<path style="fill:none;stroke-width:3;stroke-linecap:butt;stroke-linejoin:miter;stroke:rgb(96.078431%,96.078431%,96.078431%);stroke-opacity:1;stroke-miterlimit:10;" d="M 15 15 L 23 23 M 23 15 L 15 23 "/>
+</g>
+</svg>

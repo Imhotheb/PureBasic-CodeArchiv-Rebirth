@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="32pt" height="32pt" viewBox="0 0 32 32" version="1.1">
+<g id="surface7654">
+<path style=" stroke:none;fill-rule:evenodd;fill:rgb(75.294118%,75.294118%,75.294118%);fill-opacity:1;" d="M 28 6 C 28 7.378906 22.628906 8.5 16 8.5 C 9.371094 8.5 4 7.378906 4 6 C 4 4.621094 9.371094 3.5 16 3.5 C 22.628906 3.5 28 4.621094 28 6 Z M 28 26 C 28 27.378906 22.628906 28.5 16 28.5 C 9.371094 28.5 4 27.378906 4 26 C 4 24.621094 9.371094 23.5 16 23.5 C 22.628906 23.5 28 24.621094 28 26 Z M 28 26 "/>
+<path style=" stroke:none;fill-rule:evenodd;fill:rgb(75.294118%,75.294118%,75.294118%);fill-opacity:1;" d="M 4 6 L 28.5 6 L 28.5 26 L 4 26 Z M 4 6 "/>
+<path style="fill:none;stroke-width:1.5;stroke-linecap:butt;stroke-linejoin:miter;stroke:rgb(96.078431%,96.078431%,96.078431%);stroke-opacity:1;stroke-miterlimit:10;" d="M 28 6 C 28 7.378906 22.628906 8.5 16 8.5 C 9.371094 8.5 4 7.378906 4 6 M 28 11 C 28 12.378906 22.628906 13.5 16 13.5 C 9.371094 13.5 4 12.378906 4 11 M 28 16 C 28 17.378906 22.628906 18.5 16 18.5 C 9.371094 18.5 4 17.378906 4 16 M 28 21 C 28 22.378906 22.628906 23.5 16 23.5 C 9.371094 23.5 4 22.378906 4 21 "/>
+</g>
+</svg>

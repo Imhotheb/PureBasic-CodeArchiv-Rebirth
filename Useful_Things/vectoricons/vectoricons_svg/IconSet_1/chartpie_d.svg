@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="32pt" height="32pt" viewBox="0 0 32 32" version="1.1">
+<g id="surface8110">
+<path style="fill-rule:evenodd;fill:rgb(60.392157%,60.392157%,60.392157%);fill-opacity:1;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke:rgb(41.176471%,41.176471%,41.176471%);stroke-opacity:1;stroke-miterlimit:10;" d="M 30 16 L 30 20 C 30 24.417969 23.730469 28 16 28 L 16 24 Z M 30 16 " transform="matrix(1,0,0,1,0,-2)"/>
+<path style="fill-rule:evenodd;fill:rgb(60.392157%,60.392157%,60.392157%);fill-opacity:1;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke:rgb(41.176471%,41.176471%,41.176471%);stroke-opacity:1;stroke-miterlimit:10;" d="M 16 24 L 16 28 C 8.269531 28 2 24.417969 2 20 L 2 16 Z M 16 24 " transform="matrix(1,0,0,1,0,-2)"/>
+<path style="fill-rule:evenodd;fill:rgb(75.294118%,75.294118%,75.294118%);fill-opacity:1;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke:rgb(41.176471%,41.176471%,41.176471%);stroke-opacity:1;stroke-miterlimit:10;" d="M 16 16 L 6.152344 10.3125 C 11.605469 7.230469 20.394531 7.230469 25.847656 10.3125 Z M 16 16 " transform="matrix(1,0,0,1,0,-2)"/>
+<path style="fill-rule:evenodd;fill:rgb(75.294118%,75.294118%,75.294118%);fill-opacity:1;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke:rgb(41.176471%,41.176471%,41.176471%);stroke-opacity:1;stroke-miterlimit:10;" d="M 16 16 L 25.847656 10.3125 C 29.882812 12.59375 31.105469 16.042969 28.949219 19.042969 C 26.789062 22.042969 21.675781 24 16 24 Z M 16 16 " transform="matrix(1,0,0,1,0,-2)"/>
+<path style="fill-rule:evenodd;fill:rgb(75.294118%,75.294118%,75.294118%);fill-opacity:1;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke:rgb(41.176471%,41.176471%,41.176471%);stroke-opacity:1;stroke-miterlimit:10;" d="M 16 16 L 16 24 C 10.324219 24 5.210938 22.042969 3.050781 19.042969 C 0.894531 16.042969 2.117188 12.59375 6.152344 10.3125 Z M 16 16 " transform="matrix(1,0,0,1,0,-2)"/>
+</g>
+</svg>
