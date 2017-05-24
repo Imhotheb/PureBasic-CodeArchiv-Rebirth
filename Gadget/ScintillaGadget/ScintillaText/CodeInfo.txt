@@ -1,0 +1,7 @@
+;   Description: Adds lexer to the scintilla gadget
+;        Author: GPI
+;          Date: 2017-03-12
+;            OS: Windows, Linux, Mac
+; English-Forum: 
+;  French-Forum: 
+;  German-Forum: http://www.purebasic.fr/german/viewtopic.php?f=8&t=30081
