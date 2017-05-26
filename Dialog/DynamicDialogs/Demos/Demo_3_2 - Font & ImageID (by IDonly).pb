@@ -2,7 +2,11 @@
 
 EnableExplicit
 
-XIncludeFile "..\DynamicDialogs_suffixed_IDOnly.pbi"			; include the Wrapper, to easily build correct XML-Dialogs
+CompilerIf #PB_Compiler_OS = #PB_OS_Windows
+  XIncludeFile "..\DynamicDialogs_suffixed_IDOnly.pbi"			; include the Wrapper, to easily build correct XML-Dialogs
+CompilerElse ; Linux, Mac
+  XIncludeFile "../DynamicDialogs_suffixed_IDOnly.pbi"			; include the Wrapper, to easily build correct XML-Dialogs
+CompilerEndIf
 
 ; Load some Sample-Fonts
 

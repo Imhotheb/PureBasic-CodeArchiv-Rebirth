@@ -1,4 +1,8 @@
-﻿XIncludeFile "..\DynamicDialogs_plain.pbi"		; please adjust include-path
+﻿CompilerIf #PB_Compiler_OS = #PB_OS_Windows
+  XIncludeFile "..\DynamicDialogs_plain.pbi"		; please adjust include-path
+CompilerElse ; Linux, Mac
+  XIncludeFile "../DynamicDialogs_plain.pbi"		; please adjust include-path
+CompilerEndIf
 
 Enumeration ;Gadgets
 	#gad_Spacer1

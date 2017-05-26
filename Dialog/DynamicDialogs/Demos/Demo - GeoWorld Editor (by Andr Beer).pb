@@ -1,4 +1,8 @@
-﻿XIncludeFile "..\DynamicDialogs_plain.pbi"
+﻿CompilerIf #PB_Compiler_OS = #PB_OS_Windows
+  XIncludeFile "..\DynamicDialogs_plain.pbi"
+CompilerElse ; Linux, Mac
+  XIncludeFile "../DynamicDialogs_plain.pbi"
+CompilerEndIf
 
 #BlueLink = $C80000    ; used for Hyperlinks in GeoWorld
 

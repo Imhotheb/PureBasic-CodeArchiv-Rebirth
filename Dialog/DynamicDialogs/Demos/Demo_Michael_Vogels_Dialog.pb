@@ -8,7 +8,11 @@ CompilerElse
   #XmlEncoding = #PB_Ascii
 CompilerEndIf
 
-XIncludeFile "..\DynamicDialogs_plain.pbi"
+CompilerIf #PB_Compiler_OS = #PB_OS_Windows
+  XIncludeFile "..\DynamicDialogs_plain.pbi"
+CompilerElse ; Linux, Mac
+  XIncludeFile "../DynamicDialogs_plain.pbi"
+CompilerEndIf
 
 #XMLWinMain = 0
 #Dialog		= 0

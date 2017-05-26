@@ -3,8 +3,13 @@
 
 ; To inject the indentation-information for the 'DynamicDialogs_suffixed' functions, please use the 'DynamicDialogs_Suffix Indentation-Injector.pb'
 
-XIncludeFile "..\DynamicDialogs_plain.pbi"
-XIncludeFile "..\DynamicDialogs_suffixed.pbi"
+CompilerIf #PB_Compiler_OS = #PB_OS_Windows
+  XIncludeFile "..\DynamicDialogs_plain.pbi"
+  XIncludeFile "..\DynamicDialogs_suffixed.pbi"
+CompilerElse ; Linux, Mac
+  XIncludeFile "../DynamicDialogs_plain.pbi"
+  XIncludeFile "../DynamicDialogs_suffixed.pbi"
+CompilerEndIf
 
 UseModule	DynamicDialogs_plain
 

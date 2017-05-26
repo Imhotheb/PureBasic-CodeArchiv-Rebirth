@@ -1,4 +1,8 @@
-﻿XIncludeFile "..\DynamicDialogs_suffixed.pbi"
+﻿CompilerIf #PB_Compiler_OS = #PB_OS_Windows
+  XIncludeFile "..\DynamicDialogs_suffixed.pbi"
+CompilerElse ; Linux, Mac
+  XIncludeFile "../DynamicDialogs_suffixed.pbi"
+CompilerEndIf
 
 UseModule	DynamicDialogs					; to enable the 'general' commands
 UseModule	DynamicDialogs_suffixed		; to enable the XML-Elements with 'suffixed' syntax

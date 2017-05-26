@@ -4,7 +4,11 @@
 
 EnableExplicit
 
-XIncludeFile "..\DynamicDialogs_suffixed.pbi"			; include DynamicDialogs, to easily build correct XML-Dialogs
+CompilerIf #PB_Compiler_OS = #PB_OS_Windows
+  XIncludeFile "..\DynamicDialogs_suffixed.pbi"			; include DynamicDialogs, to easily build correct XML-Dialogs
+CompilerElse ; Linux, Mac
+  XIncludeFile "../DynamicDialogs_suffixed.pbi"			; include DynamicDialogs, to easily build correct XML-Dialogs
+CompilerEndIf
 
 #WinMain = 0
 #xmlMain = 0
