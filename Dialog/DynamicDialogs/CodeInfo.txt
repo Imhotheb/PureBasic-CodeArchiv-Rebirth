@@ -1,0 +1,7 @@
+;   Description: Simplifies the creation of dialog windows
+;        Author: PureLust
+;          Date: 2017-05-26
+;            OS: Windows, Linux, Mac
+; English-Forum: http://www.purebasic.fr/english/viewtopic.php?f=12&t=65330
+;  French-Forum: 
+;  German-Forum: http://www.purebasic.fr/german/viewtopic.php?f=8&t=29476
