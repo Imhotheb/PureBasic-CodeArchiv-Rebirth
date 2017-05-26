@@ -4,11 +4,13 @@
 
 CompilerIf #PB_Compiler_OS = #PB_OS_Windows
   XIncludeFile "..\DynamicDialogs_suffixed.pbi"
-compilerElse ; Linux, Mac
+  XIncludeFile "..\DynamicDialogs_plain.pbi"
+CompilerElse ; Linux, Mac
   XIncludeFile "../DynamicDialogs_suffixed.pbi"
+  XIncludeFile "../DynamicDialogs_plain.pbi"
 CompilerEndIf
 
-UseModule	DynamicDialogs
+UseModule	DynamicDialogs_plain
 
 Panel()
 Tab("Tab 1")
@@ -25,7 +27,7 @@ EndSplitter()
 EndTab()
 EndPanel()
 
-UnuseModule	DynamicDialogs
+UnuseModule	DynamicDialogs_plain
 
 ; The following code is also auto-indented with (Ctrl)-I, but it was indented right, because the indentation-Information has been injected
 
