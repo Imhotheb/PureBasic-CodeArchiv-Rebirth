@@ -2,7 +2,11 @@
 
 ; To inject the indentation-information for the 'DynamicDialogs_suffixed' functions, please use the 'DynamicDialogs_Suffix Indentation-Injector.pb'
 
-XIncludeFile "DynamicDialogs_suffixed.pbi"
+CompilerIf #PB_Compiler_OS = #PB_OS_Windows
+  XIncludeFile "..\DynamicDialogs_suffixed.pbi"
+compilerElse ; Linux, Mac
+  XIncludeFile "../DynamicDialogs_suffixed.pbi"
+CompilerEndIf
 
 UseModule	DynamicDialogs
 
