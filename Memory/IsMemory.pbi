@@ -1,6 +1,6 @@
 ﻿;   Description: Adds the function 'IsMemory()' (works like IsFile() etc.)
 ;        Author: Sicro
-;          Date: 2017-06-09
+;          Date: 2017-06-11
 ;            OS: Windows, Linux, Mac
 ; English-Forum: Not in the forum
 ;  French-Forum: Not in the forum
@@ -8,12 +8,15 @@
 ; -----------------------------------------------------------------------------
 
 Global NewMap MemoryAddresses()
+Global IsMemory_Mutex = CreateMutex()
 
 Procedure.i _AllocateMemory(Size, Flags=0)
 
   Protected *Memory = AllocateMemory(Size, Flags)
   If *Memory
+    LockMutex(IsMemory_Mutex)
     MemoryAddresses(Str(*Memory)) = #True
+    UnlockMutex(IsMemory_Mutex)
   EndIf
   ProcedureReturn *Memory
 
@@ -23,8 +26,10 @@ Procedure.i _ReAllocateMemory(*Memory, Size, Flags=0)
 
   Protected *NewMemory = ReAllocateMemory(*Memory, Size, Flags)
   If *NewMemory
+    LockMutex(IsMemory_Mutex)
     DeleteMapElement(MemoryAddresses(), Str(*Memory))
     MemoryAddresses(Str(*NewMemory)) = #True
+    UnlockMutex(IsMemory_Mutex)
   EndIf
   ProcedureReturn *NewMemory
 
@@ -32,7 +37,9 @@ EndProcedure
 
 Procedure _FreeMemory(*Memory)
   FreeMemory(*Memory)
+  LockMutex(IsMemory_Mutex)
   DeleteMapElement(MemoryAddresses(), Str(*Memory))
+  UnlockMutex(IsMemory_Mutex)
 EndProcedure
 
 Macro AllocateMemory(Size, Flags=0)
