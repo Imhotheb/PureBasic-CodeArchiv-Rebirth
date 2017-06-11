@@ -1,21 +1,21 @@
-﻿;   Description: Extends PB-FreeMemory so that it also nulls the address variable
+﻿;   Description: Adds a second FreeMemory function, which additionally zeroes the address variable
 ;        Author: Sicro
-;          Date: 2017-06-09
+;          Date: 2017-06-11
 ;            OS: Windows, Linux, Mac
 ; English-Forum: Not in the forum
 ;  French-Forum: Not in the forum
 ;  German-Forum: Not in the forum
 ; -----------------------------------------------------------------------------
 
-Procedure _FreeMemory(*Memory)
+Procedure _FreeMemoryEx(*Memory)
 
   FreeMemory(PeekI(*Memory))
   PokeI(*Memory, 0)
 
 EndProcedure
 
-Macro FreeMemory(Memory)
-  _FreeMemory(@Memory)
+Macro FreeMemoryEx(Memory)
+  _FreeMemoryEx(@Memory)
 EndMacro
 
 ;-Example
@@ -30,7 +30,7 @@ CompilerIf #PB_Compiler_IsMainFile
   Debug "Memory: " + *Memory
   Debug "---------------------"
   Debug "Free Memory"
-  FreeMemory(*Memory)
+  FreeMemoryEx(*Memory)
   Debug "---------------------"
   Debug "Memory: " + *Memory
 
