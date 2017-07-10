@@ -326,7 +326,7 @@ Module DynamicDialogs
 			If Len(Text$)	:	XML$	+	" text='"+T2H(Text$)+"'" : EndIf
 		EndMacro
 		Macro Auswertung_Parameter_URL															; Macro für Parameter: URL$
-			If Len(URL$)	:	URL$	+	" text='"+T2H(URL$)+"'" : EndIf
+			If Len(URL$)	:	XML$	+	" text='"+T2H(URL$)+"'" : EndIf
 		EndMacro
 		Macro Auswertung_Parameter_Titel															; Macro für Parameter: Titel$
 			If Len(Titel$)	:	XML$	+	" text='"+T2H(Titel$)+"'" : EndIf
