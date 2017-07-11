@@ -1,5 +1,7 @@
 # PureBasic-CodeArchiv-Rebirth
 
+First, a huge thanks to GPI for his gigantic work. He started the project and added many codes.
+
 After Sicro took over the project from GPI, the repository was completely revised:
 * All commits now contain only changes that match the commit description
 * Code categories renamed (adapted to the structure of the PB help)
