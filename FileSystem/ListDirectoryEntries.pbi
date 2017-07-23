@@ -47,7 +47,7 @@ Procedure ListDirectoryEntries(Path$, List DirectoryEntries$(), FileExtensions$=
               If EntryExtension$ = ""
                 Continue
               EndIf
-              If Not FindString(FileExtensions$, "," + EntryExtension$ + ",")
+              If Not FindString(FileExtensions$, "," + EntryExtension$ + ",", #PB_String_NoCase)
                 Continue
               EndIf
             EndIf
