@@ -1,15 +1,11 @@
 ﻿;   Description: Support for enlarged date range (64 bit unix timestamp)
 ;        Author: mk-soft (Windows); Sicro (Windows, Linux, Mac; converted to module; and more); ts-soft (fixed structures for Windows, Linux and Mac)
-;          Date: 2016-05-27
-;            OS: Windows, Linux
+;          Date: 2017-07-27
+;            OS: Windows, Linux, Mac
 ; English-Forum: 
 ;  French-Forum: 
 ;  German-Forum: http://www.purebasic.fr/german/viewtopic.php?p=335727#p335727
 ; -----------------------------------------------------------------------------
-
-CompilerIf #PB_Compiler_OS <> #PB_OS_Windows And #PB_Compiler_OS <> #PB_OS_Linux
-  CompilerError "Supported OS are only: Windows, Linux"
-CompilerEndIf
 
 DeclareModule Date64
   Declare.i IsLeapYear64(Year.i)
@@ -35,12 +31,6 @@ Module Date64
     CompilerError "32-Bit not supported on MacOS"
   CompilerEndIf
 
-  CompilerIf #PB_Compiler_OS <> #PB_OS_Windows
-    ImportC ""
-      gmtime_r_(*timep, *result) As "gmtime_r"
-    EndImport
-  CompilerEndIf
-
   ; == Windows ==
   ; >> Minimum: 01.01.1601 00:00:00
   ; >> Maximum: 31.12.9999 23:59:59
@@ -54,7 +44,8 @@ Module Date64
   ; >> Maximum: 31.12.9999 23:59:59
 
   ; == MacOS ==
-  ; wie bei Linux?
+  ; >> Minimum: 31.12.1969 23:59:59
+  ; >> Maximum: 31.12.9999 23:59:59
 
   #SecondsInOneHour = 60 * 60
   #SecondsInOneDay  = #SecondsInOneHour * 24
@@ -260,13 +251,14 @@ Module Date64
   EndMacro
 
   Macro LinuxMac_ReturnDatePart(Type, ReturnCode)
-    Protected.tm tm
+    Protected.tm *tm
     Protected.i  Value
 
-    If gmtime_r_(@Date, @tm) <> 0 ; Per Memory ist es thread-sicher
-      Value = tm\Type
-      ProcedureReturn ReturnCode
+    *tm = gmtime_(@Date)
+    If *tm
+      Value = *tm\Type
     EndIf
+    ProcedureReturn ReturnCode
   EndMacro
 
   Procedure.i Year64(Date.q)
@@ -548,15 +540,18 @@ CompilerIf #PB_Compiler_IsMainFile
   
   Debug "---------------------"
   Debug "Test der Datum-Grenzen - Fehler:"
-  CompilerIf #PB_Compiler_OS = #PB_OS_Windows
-    TestDateLimits("01.01.1601 00:00:00", "31.12.9999 23:59:59")
-  CompilerElse ; Linux oder Mac
-    CompilerIf #PB_Compiler_Processor = #PB_Processor_x86
-      TestDateLimits("01.01.1902 00:00:00", "18.01.2038 23:59:59")
-    CompilerElse
-      TestDateLimits("01.01.0000 00:00:00", "31.12.9999 23:59:59")
-    CompilerEndIf
-  CompilerEndIf
+  CompilerSelect #PB_Compiler_OS
+    CompilerCase #PB_OS_Windows
+      TestDateLimits("01.01.1601 00:00:00", "31.12.9999 23:59:59")
+    CompilerCase #PB_OS_Linux
+      CompilerIf #PB_Compiler_Processor = #PB_Processor_x86
+        TestDateLimits("01.01.1902 00:00:00", "18.01.2038 23:59:59")
+      CompilerElse
+        TestDateLimits("01.01.0000 00:00:00", "31.12.9999 23:59:59")
+      CompilerEndIf
+    CompilerCase #PB_OS_MacOS
+      TestDateLimits("31.12.1969 23:59:59", "31.12.9999 23:59:59")
+  CompilerEndSelect
   
   Debug "---------------------"
   Debug "Test wurde durchgeführt"
