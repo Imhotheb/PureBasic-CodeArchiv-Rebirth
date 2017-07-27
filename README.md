@@ -15,7 +15,7 @@
 
 ## Steps to add new codes
 * One file codes:
-  * To format the code correctly, use the "code_formatting_helper" from the "repo-dev" branch
+  * To format the code correctly, use the "Code_formatting_helper" from the "repo-dev" branch
   * Insert the supported OS on the end of the file name, like this: CodeName[Win,Lin,Mac].pb
   * If the code supports all OS, ignore the step above
   * If the code file contains only functions (include file) and does not execute any problematic
@@ -35,16 +35,50 @@
 * Commit the new code:
   * If the code works correctly:
     * Commit directly into the "next" branch
-  * If the code is not working correctly:
+      ```bash
+      git checkout next
+      >> Do your changes <<
+      git add --all
+      git commit -m "Add CodeName"
+      git push origin next
+      ```
+  * If the code is not working correctly or needs more commits:
     * Create a new branch from the top of the "master" branch, name this new branch
       "pu/NameOfTheNewCode" and create the commit in this branch
+      ```bash
+      git checkout master
+      git checkout -b pu/NameOfTheNewCode
+      ...
+      --- Repeat this steps ---
+      >> Do your changes <<
+      git add --all
+      git commit -m "Short description of the change"
+      ...
+      git push origin pu/NameOfTheNewCode
+      ```
     * Fixes are performed in this branch until the code is error-free and the branch can be merged
       into the "next" branch.
+      ```bash
+      git checkout pu/NameOfTheNewCode
+      ...
+      --- Repeat this steps ---
+      >> Do your changes <<
+      git add --all
+      git commit -m "Short description of the change"
+      ...
+      git push origin pu/NameOfTheNewCode
+      ```
     * Please use the parameter "--no-ff" (no fast-forward) when you merge the "pu" branch to the
       "next" branch so that a merge commit is enforced. So it is better to see which commit
       belongs to which main change. It is then also easier to completely remove the code later, if
       necessary.
-
+      ```bash
+      git checkout next
+      git merge --no-ff pu/NameOfTheNewCode
+      git branch -d pu/NameOfTheNewCode
+      git push origin next
+      ```
+    
 ## Steps to check if there are updated codes in the forums
 * Use the "Forum-Codes-Updates-Checker" from the "repo-dev" branch to automatically check if there
   are updated codes in the forums. The PB tool uses the forums urls from the code headers. With
@@ -56,5 +90,11 @@
 * Use the "CodesChecker" from the "repo-dev" branch to check the current state of the "next"
   branch with the latest PureBasic version and under all operating systems (Windows, Linux, MacOS)
   for errors
-  * If no errors are reported, the "next" branch can be merged into the "master" branch
+  * If no errors are reported, the "next" branch can be merged into the "master" branch.
+    Please use the parameter "--ff-only" (fast-forward only) when you merge.
+    ```bash
+    git checkout master
+    git merge --ff-only next
+    git push origin master
+    ```
   * If there are still errors, they are still to be fixed in the "next" branch
