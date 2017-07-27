@@ -1,15 +1,11 @@
 ﻿;   Description: Support for enlarged date range (64 bit unix timestamp)
 ;        Author: mk-soft (Windows); Sicro (Windows, Linux, Mac; converted to module; and more); ts-soft (fixed structures for Windows, Linux and Mac)
 ;          Date: 2016-05-27
-;            OS: Windows, Linux
+;            OS: Windows, Linux, Mac
 ; English-Forum: 
 ;  French-Forum: 
 ;  German-Forum: http://www.purebasic.fr/german/viewtopic.php?p=335727#p335727
 ; -----------------------------------------------------------------------------
-
-CompilerIf #PB_Compiler_OS <> #PB_OS_Windows And #PB_Compiler_OS <> #PB_OS_Linux
-  CompilerError "Supported OS are only: Windows, Linux"
-CompilerEndIf
 
 DeclareModule Date64
   Declare.i IsLeapYear64(Year.i)
@@ -33,12 +29,6 @@ Module Date64
 
   CompilerIf #PB_Compiler_OS = #PB_OS_MacOS And #PB_Compiler_Processor = #PB_Processor_x86
     CompilerError "32-Bit not supported on MacOS"
-  CompilerEndIf
-
-  CompilerIf #PB_Compiler_OS <> #PB_OS_Windows
-    ImportC ""
-      gmtime_r_(*timep, *result) As "gmtime_r"
-    EndImport
   CompilerEndIf
 
   ; == Windows ==
@@ -260,13 +250,14 @@ Module Date64
   EndMacro
 
   Macro LinuxMac_ReturnDatePart(Type, ReturnCode)
-    Protected.tm tm
+    Protected.tm *tm
     Protected.i  Value
 
-    If gmtime_r_(@Date, @tm) <> 0 ; Per Memory ist es thread-sicher
-      Value = tm\Type
-      ProcedureReturn ReturnCode
+    *tm = gmtime_(@Date)
+    If *tm
+      Value = *tm\Type
     EndIf
+    ProcedureReturn ReturnCode
   EndMacro
 
   Procedure.i Year64(Date.q)
