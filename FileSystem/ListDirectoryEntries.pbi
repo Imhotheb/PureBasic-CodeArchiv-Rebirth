@@ -1,11 +1,14 @@
 ﻿;   Description: Adds directory entries to a list
 ;        Author: Sicro
-;          Date: 2017-07-23
+;          Date: 2017-07-27
 ;            OS: Windows, Linux, Mac
 ; English-Forum: Not in the forum
 ;  French-Forum: Not in the forum
 ;  German-Forum: Not in the forum
 ; -----------------------------------------------------------------------------
+
+; Thanks goes to "useful" from the English forum for the inspiration to use a callback:
+; http://www.purebasic.fr/english/viewtopic.php?f=12&t=68172
 
 EnumerationBinary 
   #ListDirectoryEntries_Mode_ListDirectories
@@ -13,7 +16,9 @@ EnumerationBinary
   #ListDirectoryEntries_Mode_ListAll = #ListDirectoryEntries_Mode_ListDirectories | #ListDirectoryEntries_Mode_ListFiles
 EndEnumeration
 
-Procedure ListDirectoryEntries(Path$, List DirectoryEntries$(), FileExtensions$="", EnableRecursiveScan=#True, Mode=#ListDirectoryEntries_Mode_ListAll)
+Prototype ProtoListDirectoryEntriesCallback(EntryPath$)
+
+Procedure ListDirectoryEntries(Path$, Callback.ProtoListDirectoryEntriesCallback, FileExtensions$="", EnableRecursiveScan=#True, Mode=#ListDirectoryEntries_Mode_ListAll)
 
   Protected Directory
   Protected EntryName$
@@ -51,20 +56,18 @@ Procedure ListDirectoryEntries(Path$, List DirectoryEntries$(), FileExtensions$=
                 Continue
               EndIf
             EndIf
-            If AddElement(DirectoryEntries$())
-              DirectoryEntries$() = Path$ + EntryName$
-            EndIf
+            Callback(Path$ + EntryName$)
           EndIf
 
         Case #PB_DirectoryEntry_Directory
 
           If EntryName$ <> "." And EntryName$ <> ".."
-            If Mode & #ListDirectoryEntries_Mode_ListDirectories And AddElement(DirectoryEntries$())
-              DirectoryEntries$() = Path$ + EntryName$
+            If Mode & #ListDirectoryEntries_Mode_ListDirectories
+              Callback(Path$ + EntryName$)
             EndIf
 
             If EnableRecursiveScan
-              ListDirectoryEntries(Path$ + EntryName$, DirectoryEntries$(), FileExtensions$, EnableRecursiveScan, Mode)
+              ListDirectoryEntries(Path$ + EntryName$, Callback, FileExtensions$, EnableRecursiveScan, Mode)
             EndIf
 
           EndIf
@@ -79,12 +82,14 @@ EndProcedure
 
 ;-Example
 CompilerIf #PB_Compiler_IsMainFile
-  NewList myList$()
-  ListDirectoryEntries(GetUserDirectory(#PB_Directory_Documents), myList$())
-  ;ListDirectoryEntries(GetUserDirectory(#PB_Directory_Documents), myList$(), "pdf,txt", #True, #ListDirectoryEntries_Mode_ListFiles)
-  ;ListDirectoryEntries(GetUserDirectory(#PB_Directory_Documents), myList$(), "", #True, #ListDirectoryEntries_Mode_ListDirectories)
-  ;ListDirectoryEntries(GetUserDirectory(#PB_Directory_Documents), myList$(), "", #False, #ListDirectoryEntries_Mode_ListFiles)
-  ForEach myList$()
-    Debug myList$()
-  Next
+  
+  Procedure Callback(EntryPath$)
+    Debug EntryPath$
+  EndProcedure
+  
+  ListDirectoryEntries(GetUserDirectory(#PB_Directory_Documents), @Callback())
+  ;ListDirectoryEntries(GetUserDirectory(#PB_Directory_Documents), @Callback(), "pdf,txt", #True, #ListDirectoryEntries_Mode_ListFiles)
+  ;ListDirectoryEntries(GetUserDirectory(#PB_Directory_Documents), @Callback(), "", #True, #ListDirectoryEntries_Mode_ListDirectories)
+  ;ListDirectoryEntries(GetUserDirectory(#PB_Directory_Documents), @Callback(), "", #False, #ListDirectoryEntries_Mode_ListFiles)
+  
 CompilerEndIf
