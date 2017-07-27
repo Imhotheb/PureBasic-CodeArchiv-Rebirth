@@ -44,7 +44,8 @@ Module Date64
   ; >> Maximum: 31.12.9999 23:59:59
 
   ; == MacOS ==
-  ; wie bei Linux?
+  ; >> Minimum: 31.12.1969 23:59:59
+  ; >> Maximum: 31.12.9999 23:59:59
 
   #SecondsInOneHour = 60 * 60
   #SecondsInOneDay  = #SecondsInOneHour * 24
@@ -539,15 +540,18 @@ CompilerIf #PB_Compiler_IsMainFile
   
   Debug "---------------------"
   Debug "Test der Datum-Grenzen - Fehler:"
-  CompilerIf #PB_Compiler_OS = #PB_OS_Windows
-    TestDateLimits("01.01.1601 00:00:00", "31.12.9999 23:59:59")
-  CompilerElse ; Linux oder Mac
-    CompilerIf #PB_Compiler_Processor = #PB_Processor_x86
-      TestDateLimits("01.01.1902 00:00:00", "18.01.2038 23:59:59")
-    CompilerElse
-      TestDateLimits("01.01.0000 00:00:00", "31.12.9999 23:59:59")
-    CompilerEndIf
-  CompilerEndIf
+  CompilerSelect #PB_Compiler_OS
+    CompilerCase #PB_OS_Windows
+      TestDateLimits("01.01.1601 00:00:00", "31.12.9999 23:59:59")
+    CompilerCase #PB_OS_Linux
+      CompilerIf #PB_Compiler_Processor = #PB_Processor_x86
+        TestDateLimits("01.01.1902 00:00:00", "18.01.2038 23:59:59")
+      CompilerElse
+        TestDateLimits("01.01.0000 00:00:00", "31.12.9999 23:59:59")
+      CompilerEndIf
+    CompilerCase #PB_OS_MacOS
+      TestDateLimits("31.12.1969 23:59:59", "31.12.9999 23:59:59")
+  CompilerEndSelect
   
   Debug "---------------------"
   Debug "Test wurde durchgeführt"
