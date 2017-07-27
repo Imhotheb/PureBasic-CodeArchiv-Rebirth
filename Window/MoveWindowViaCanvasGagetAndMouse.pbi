@@ -1,10 +1,10 @@
-﻿;    Description: Adds support to move borderless windows with CanvasGadget via mouse
-;         Author: Danilo, Bisonte
-;           Date: 2017-05-14
-;             OS: Windows, Linux, Mac
-;  English-Forum: 
-;   French-Forum: 
-;   German-Forum: http://www.purebasic.fr/german/viewtopic.php?f=8&t=30154
+﻿;   Description: Adds support to move borderless windows with CanvasGadget via mouse
+;        Author: Danilo, Bisonte
+;          Date: 2017-05-14
+;            OS: Windows, Linux, Mac
+; English-Forum: 
+;  French-Forum: 
+;  German-Forum: http://www.purebasic.fr/german/viewtopic.php?f=8&t=30154
 ; -----------------------------------------------------------------------------
 
 ;: Module   : CanvasWindowMover (CWMove)
