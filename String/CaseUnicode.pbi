@@ -1,10 +1,10 @@
-﻿;    Description: Adds support for upper and lower case-mapping for unicode
-;         Author: mk-soft
-;           Date: 2017-07-09
-;             OS: Windows, Linux, Mac
-;  English-Forum: http://www.purebasic.fr/english/viewtopic.php?f=12&t=68536
-;   French-Forum: 
-;   German-Forum: 
+﻿;   Description: Adds support for upper and lower case-mapping for unicode
+;        Author: mk-soft
+;          Date: 2017-07-09
+;            OS: Windows, Linux, Mac
+; English-Forum: http://www.purebasic.fr/english/viewtopic.php?f=12&t=68536
+;  French-Forum: 
+;  German-Forum: 
 ; -----------------------------------------------------------------------------
 
 ;-Top
