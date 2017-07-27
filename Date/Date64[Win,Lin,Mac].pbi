@@ -1,6 +1,6 @@
 ﻿;   Description: Support for enlarged date range (64 bit unix timestamp)
 ;        Author: mk-soft (Windows); Sicro (Windows, Linux, Mac; converted to module; and more); ts-soft (fixed structures for Windows, Linux and Mac)
-;          Date: 2016-05-27
+;          Date: 2017-07-27
 ;            OS: Windows, Linux, Mac
 ; English-Forum: 
 ;  French-Forum: 
