@@ -1,5 +1,5 @@
 ﻿;   Description: Support for enlarged date range (64 bit unix timestamp)
-;        Author: mk-soft (Windows); Sicro (Windows, Linux, Mac; converted to module; and more); ts-soft (fixed structures for Windows, Linux and Mac)
+;        Author: mk-soft (Windows); Sicro (Windows, Linux, Mac; converted to module; and more); ts-soft (fixed structures for Windows, Linux and Mac); wilbert (changed Mac-API)
 ;          Date: 2017-07-27
 ;            OS: Windows, Linux, Mac
 ; English-Forum: 
@@ -27,10 +27,6 @@ EndDeclareModule
 Module Date64
   EnableExplicit
 
-  CompilerIf #PB_Compiler_OS = #PB_OS_MacOS And #PB_Compiler_Processor = #PB_Processor_x86
-    CompilerError "32-Bit not supported on MacOS"
-  CompilerEndIf
-  
   ; !!! >>> WARNUNG <<< !!!
   ; Der gregorianische Kalender wurde in vielen Gebieten zu unterschiedlichen Zeiten eingeführt.
   ; Dieses Modul verwendet die API-Datumsfunktionen des Betriebssystems und diese haben eine
@@ -59,53 +55,59 @@ Module Date64
   #HundredNanosecondsInOneSecond               = 10000000
   #HundredNanosecondsFrom_1Jan1601_To_1Jan1970 = 116444736000000000
 
-  ;{ Structure definition for "tm"
-  CompilerSelect #PB_Compiler_OS
-    CompilerCase #PB_OS_Linux
-      If Not Defined(tm, #PB_Structure)
-        Structure tm Align #PB_Structure_AlignC
-          tm_sec.l    ; 0 to 59 or up to 60 at leap second
-          tm_min.l    ; 0 to 59
-          tm_hour.l   ; 0 to 23
-          tm_mday.l   ; Day of the month: 1 to 31
-          tm_mon.l    ; Month: 0 to 11 (0 = January)
-          tm_year.l   ; Number of years since the year 1900
-          tm_wday.l   ; Weekday: 0 to 6, 0 = Sunday
-          tm_yday.l   ; Days since the beginning of the year: 0 to 365 (365 is therefore 366 because after 1. January is counted)
-          tm_isdst.l  ; Is summer time? tm_isdst > 0 = Yes
-                      ;                             tm_isdst = 0 = No
-                      ;                             tm_isdst < 0 = Unknown
-          CompilerIf #PB_Compiler_Processor = #PB_Processor_x86
-            tm_gmtoff.l ; Offset of UTC in seconds
-            *tm_zone    ; Abbreviation of the time zone
-          CompilerElse
-            tm_zone.l   ; Placeholder
-            tm_gmtoff.l ; Offset of UTC in seconds
-            *tm_zone64  ; Abbreviation of the time zone
-          CompilerEndIf
+  CompilerIf #PB_Compiler_OS = #PB_OS_MacOS
+    ImportC ""
+      CFCalendarAddComponents(calendar, *at, options, componentDesc.p-ascii, value)
+      CFCalendarComposeAbsoluteTime(calendar, *at, componentDesc.p-ascii, year, month, day, hour, minute, second)
+      CFCalendarCreateWithIdentifier(allocator, identifier)
+      CFCalendarDecomposeAbsoluteTime(calendar, at.d, componentDesc.p-ascii, *component)
+      CFCalendarSetTimeZone(calendar, tz)
+      CFTimeZoneCopyDefault()
+      CFTimeZoneCreateWithTimeIntervalFromGMT(allocator, ti.d)
+      CFTimeZoneGetSecondsFromGMT.d(tz, at.d)
+    EndImport
 
-        EndStructure
-      EndIf
-    CompilerCase #PB_OS_MacOS
-      If Not Defined(tm, #PB_Structure)
-        Structure tm Align #PB_Structure_AlignC
-          tm_sec.l    ; 0 to 59 or up to 60 at leap second
-          tm_min.l    ; 0 to 59
-          tm_hour.l   ; 0 to 23
-          tm_mday.l   ; Day of the month: 1 to 31
-          tm_mon.l    ; Month: 0 to 11 (0 = Januar)
-          tm_year.l   ; Number of years since the year 1900
-          tm_wday.l   ; Weekday: 0 to 6, 0 = Sunday
-          tm_yday.l   ; Days since the beginning of the year: 0 to 365 (365 is therefore 366 because after 1. January is counted)
-          tm_isdst.l  ; Is summer time? tm_isdst > 0 = Yes
-                      ;                             tm_isdst = 0 = No
-                      ;                             tm_isdst < 0 = Unknown
-          tm_zone.l   ; Abbreviation of the time zone (On a 64bit system it is also a 32bit value)
+    Global.i GregorianGMT, TimeZone
+
+    Procedure Date64Init(); Init global variables GregorianGMT and TimeZone
+      Protected *kCFGregorianCalendar.Integer = dlsym_(#RTLD_DEFAULT, "kCFGregorianCalendar")
+      TimeZone = CFTimeZoneCreateWithTimeIntervalFromGMT(0, 0)
+      GregorianGMT = CFCalendarCreateWithIdentifier(0, *kCFGregorianCalendar\i)
+      CFCalendarSetTimeZone(GregorianGMT, TimeZone)
+      CFRelease_(TimeZone)
+      TimeZone = CFTimeZoneCopyDefault()
+    EndProcedure
+
+    Date64Init()
+  CompilerEndIf
+
+  ;{ Structure definition for "tm"
+  CompilerIf #PB_Compiler_OS = #PB_OS_Linux
+    If Not Defined(tm, #PB_Structure)
+      Structure tm Align #PB_Structure_AlignC
+        tm_sec.l    ; 0 to 59 or up to 60 at leap second
+        tm_min.l    ; 0 to 59
+        tm_hour.l   ; 0 to 23
+        tm_mday.l   ; Day of the month: 1 to 31
+        tm_mon.l    ; Month: 0 to 11 (0 = January)
+        tm_year.l   ; Number of years since the year 1900
+        tm_wday.l   ; Weekday: 0 to 6, 0 = Sunday
+        tm_yday.l   ; Days since the beginning of the year: 0 to 365 (365 is therefore 366 because after 1. January is counted)
+        tm_isdst.l  ; Is summer time? tm_isdst > 0 = Yes
+                    ;                             tm_isdst = 0 = No
+                    ;                             tm_isdst < 0 = Unknown
+        CompilerIf #PB_Compiler_Processor = #PB_Processor_x86
+          tm_gmtoff.l ; Offset of UTC in seconds
+          *tm_zone    ; Abbreviation of the time zone
+        CompilerElse
+          tm_zone.l   ; Placeholder
           tm_gmtoff.l ; Offset of UTC in seconds
           *tm_zone64  ; Abbreviation of the time zone
-        EndStructure
-      EndIf
-  CompilerEndSelect
+        CompilerEndIf
+
+      EndStructure
+    EndIf
+  CompilerEndIf
   ;}
 
   Procedure.i IsLeapYear64(Year.i)
@@ -141,110 +143,122 @@ Module Date64
   EndProcedure
 
   Procedure.q Date64(Year.i=-1, Month.i=1, Day.i=1, Hour.i=0, Minute.i=0, Second.i=0)
-    CompilerIf #PB_Compiler_OS = #PB_OS_Windows
-      Protected.SYSTEMTIME st
-      Protected.FILETIME   ft, ft2
-      Protected.i          DaysInMonth
+    CompilerSelect #PB_Compiler_OS
+      CompilerCase #PB_OS_Windows
+        Protected.SYSTEMTIME st
+        Protected.FILETIME   ft, ft2
+        Protected.i          DaysInMonth
 
-      If Year > -1 ; Valid date
+        If Year > -1 ; Valid date
 
-        ; Correct the data, if necessary
+          ; Correct the data, if necessary
 
-        Minute + Second/60
-        Second % 60
-        If Second < 0
-          Minute - 1
-          Second + 60
-        EndIf
+          Minute + Second/60
+          Second % 60
+          If Second < 0
+            Minute - 1
+            Second + 60
+          EndIf
 
-        Hour + Minute/60
-        Minute % 60
-        If Minute < 0
-          Hour   - 1
-          Minute + 60
-        EndIf
+          Hour + Minute/60
+          Minute % 60
+          If Minute < 0
+            Hour   - 1
+            Minute + 60
+          EndIf
 
-        Day + Hour/24
-        Hour % 24
-        If Hour < 0
-          Day  - 1
-          Hour + 24
-        EndIf
+          Day + Hour/24
+          Hour % 24
+          If Hour < 0
+            Day  - 1
+            Hour + 24
+          EndIf
 
-        While Month > 12
-          Year  + 1
-          Month - 12
-        Wend
-        If Month = 0
-          Month = 1
-        EndIf
-
-        DaysInMonth = DaysInMonth64(Year, Month)
-        While Day > DaysInMonth
-          Day - DaysInMonth
-          Month + 1
-          If Month > 12
+          While Month > 12
             Year  + 1
             Month - 12
-          EndIf
-          DaysInMonth = DaysInMonth64(Year, Month)
-        Wend
-
-        If Day < 0
-          Month - 1
+          Wend
           If Month = 0
-            Year  - 1
-            Month = 12
+            Month = 1
           EndIf
-          Day + DaysInMonth64(Year, Month)
+
+          DaysInMonth = DaysInMonth64(Year, Month)
+          While Day > DaysInMonth
+            Day - DaysInMonth
+            Month + 1
+            If Month > 12
+              Year  + 1
+              Month - 12
+            EndIf
+            DaysInMonth = DaysInMonth64(Year, Month)
+          Wend
+
+          If Day < 0
+            Month - 1
+            If Month = 0
+              Year  - 1
+              Month = 12
+            EndIf
+            Day + DaysInMonth64(Year, Month)
+          EndIf
+
+          st\wYear   = Year
+          st\wMonth  = Month
+          st\wDay    = Day
+          st\wHour   = Hour
+          st\wMinute = Minute
+          st\wSecond = Second
+
+          ; Convert system time (UTC) to file time (UTC)
+          SystemTimeToFileTime_(@st, @ft)
+
+          ; Convert UTC time to seconds
+          ProcedureReturn (PeekQ(@ft) - #HundredNanosecondsFrom_1Jan1601_To_1Jan1970) / #HundredNanosecondsInOneSecond
+        Else
+          ; No valid date. Local system time is determined
+          GetLocalTime_(@st)
+          SystemTimeToFileTime_(@st, @ft) ; "st" is read as UTC and convert to file time
+
+          ; Convert UTC time to seconds
+          ProcedureReturn (PeekQ(@ft) - #HundredNanosecondsFrom_1Jan1601_To_1Jan1970) / #HundredNanosecondsInOneSecond
         EndIf
 
-        st\wYear   = Year
-        st\wMonth  = Month
-        st\wDay    = Day
-        st\wHour   = Hour
-        st\wMinute = Minute
-        st\wSecond = Second
+      CompilerCase #PB_OS_Linux
+        Protected.tm tm
+        Protected.q time
+        
+        If Year > -1 ; Valid date
+          tm\tm_year  = Year - 1900 ; Years from 1900
+          tm\tm_mon   = Month - 1   ; Months from January
+          tm\tm_mday  = Day
+          tm\tm_hour  = Hour
+          tm\tm_min   = Minute
+          tm\tm_sec   = Second
 
-        ; Convert system time (UTC) to file time (UTC)
-        SystemTimeToFileTime_(@st, @ft)
+          ; mktime corrects the data itself and delivers seconds
+          time = timegm_(@tm) ; Convert structured UTC time to UTC time as seconds
 
-        ; Convert UTC time to seconds
-        ProcedureReturn (PeekQ(@ft) - #HundredNanosecondsFrom_1Jan1601_To_1Jan1970) / #HundredNanosecondsInOneSecond
-      Else
-        ; No valid date. Local system time is determined
-        GetLocalTime_(@st)
-        SystemTimeToFileTime_(@st, @ft) ; "st" is read as UTC and convert to file time
+          ProcedureReturn time ; UTC time in seconds
+        Else
+          ; No valid date. Local system time is determined
+          time = time_(0)
+          If localtime_r_(@time, @tm) <> 0
+            time = timegm_(@tm)
+          EndIf
 
-        ; Convert UTC time to seconds
-        ProcedureReturn (PeekQ(@ft) - #HundredNanosecondsFrom_1Jan1601_To_1Jan1970) / #HundredNanosecondsInOneSecond
-      EndIf
-    CompilerElse ; Linux or Mac
-      Protected.tm tm
-      Protected.q time
-
-      If Year > -1 ; Valid date
-        tm\tm_year  = Year - 1900 ; Years from 1900
-        tm\tm_mon   = Month - 1   ; Months from January
-        tm\tm_mday  = Day
-        tm\tm_hour  = Hour
-        tm\tm_min   = Minute
-        tm\tm_sec   = Second
-
-        ; mktime corrects the data itself and delivers seconds
-        time = timegm_(@tm) ; Convert structured UTC time to UTC time as seconds
-
-        ProcedureReturn time ; UTC time in seconds
-      Else
-        ; No valid date. Local system time is determined
-        time = time_(0)
-        If localtime_r_(@time, @tm) <> 0
-          time = timegm_(@tm)
+          ProcedureReturn time  ; UTC time in seconds
         EndIf
 
-        ProcedureReturn time  ; UTC time in seconds
-      EndIf
-    CompilerEndIf
+      CompilerCase #PB_OS_MacOS
+        Protected at.d
+        If Year > -1 ; Valid date
+          CFCalendarComposeAbsoluteTime(GregorianGMT, @at, "yMdHms", Year, Month, Day, Hour, Minute, Second)
+        Else ; No valid date. Local system time is determined
+          at = CFAbsoluteTimeGetCurrent_()
+          at + CFTimeZoneGetSecondsFromGMT(TimeZone, at)
+        EndIf
+        ProcedureReturn at + 978307200
+    CompilerEndSelect
   EndProcedure
 
   Macro Windows_ReturnDatePart(Type)
@@ -256,7 +270,7 @@ Module Date64
     ProcedureReturn st\Type
   EndMacro
 
-  Macro LinuxMac_ReturnDatePart(Type, ReturnCode)
+  Macro Linux_ReturnDatePart(Type, ReturnCode)
     Protected.tm *tm
     Protected.i  Value
 
@@ -264,102 +278,140 @@ Module Date64
     If *tm
       Value = *tm\Type
     EndIf
+
     ProcedureReturn ReturnCode
   EndMacro
 
-  Procedure.i Year64(Date.q)
-    CompilerIf #PB_Compiler_OS = #PB_OS_Windows
-      Windows_ReturnDatePart(wYear)
-    CompilerElse ; Linux or Mac
-      LinuxMac_ReturnDatePart(tm_year, Value + 1900)
+  Macro Mac_ReturnDatePart(Type)
+    Protected.i DatePart
+
+    CFCalendarDecomposeAbsoluteTime(GregorianGMT, Date - 978307200, Type, @DatePart)
+
+    CompilerIf Type = "E"
+      ProcedureReturn DatePart - 1
+    CompilerElse
+      ProcedureReturn DatePart
     CompilerEndIf
+  EndMacro
+
+  Procedure.i Year64(Date.q)
+    CompilerSelect #PB_Compiler_OS
+      CompilerCase #PB_OS_Windows : Windows_ReturnDatePart(wYear)
+      CompilerCase #PB_OS_Linux   : Linux_ReturnDatePart(tm_year, Value + 1900)
+      CompilerCase #PB_OS_MacOS   : Mac_ReturnDatePart("y")
+    CompilerEndSelect
   EndProcedure
 
   Procedure.i Month64(Date.q)
-    CompilerIf #PB_Compiler_OS = #PB_OS_Windows
-      Windows_ReturnDatePart(wMonth)
-    CompilerElse ; Linux or Mac
-      LinuxMac_ReturnDatePart(tm_mon, Value + 1)
-    CompilerEndIf
+    CompilerSelect #PB_Compiler_OS
+      CompilerCase #PB_OS_Windows : Windows_ReturnDatePart(wMonth)
+      CompilerCase #PB_OS_Linux   : Linux_ReturnDatePart(tm_mon, Value + 1)
+      CompilerCase #PB_OS_MacOS   : Mac_ReturnDatePart("M")
+    CompilerEndSelect
   EndProcedure
 
   Procedure.i Day64(Date.q)
-    CompilerIf #PB_Compiler_OS = #PB_OS_Windows
-      Windows_ReturnDatePart(wDay)
-    CompilerElse ; Linux or Mac
-      LinuxMac_ReturnDatePart(tm_mday, Value)
-    CompilerEndIf
+    CompilerSelect #PB_Compiler_OS
+      CompilerCase #PB_OS_Windows : Windows_ReturnDatePart(wDay)
+      CompilerCase #PB_OS_Linux   : Linux_ReturnDatePart(tm_mday, Value)
+      CompilerCase #PB_OS_MacOS   : Mac_ReturnDatePart("d")
+    CompilerEndSelect
   EndProcedure
 
   Procedure.i Hour64(Date.q)
-    CompilerIf #PB_Compiler_OS = #PB_OS_Windows
-      Windows_ReturnDatePart(wHour)
-    CompilerElse ; Linux or Mac
-      LinuxMac_ReturnDatePart(tm_hour, Value)
-    CompilerEndIf
+    CompilerSelect #PB_Compiler_OS
+      CompilerCase #PB_OS_Windows : Windows_ReturnDatePart(wHour)
+      CompilerCase #PB_OS_Linux   : Linux_ReturnDatePart(tm_hour, Value)
+      CompilerCase #PB_OS_MacOS   : Mac_ReturnDatePart("H")
+    CompilerEndSelect
   EndProcedure
 
   Procedure.i Minute64(Date.q)
-    CompilerIf #PB_Compiler_OS = #PB_OS_Windows
-      Windows_ReturnDatePart(wMinute)
-    CompilerElse ; Linux or Mac
-      LinuxMac_ReturnDatePart(tm_min, Value)
-    CompilerEndIf
+    CompilerSelect #PB_Compiler_OS
+      CompilerCase #PB_OS_Windows : Windows_ReturnDatePart(wMinute)
+      CompilerCase #PB_OS_Linux   : Linux_ReturnDatePart(tm_min, Value)
+      CompilerCase #PB_OS_MacOS   : Mac_ReturnDatePart("m")
+    CompilerEndSelect
   EndProcedure
 
   Procedure.i Second64(Date.q)
-    CompilerIf #PB_Compiler_OS = #PB_OS_Windows
-      Windows_ReturnDatePart(wSecond)
-    CompilerElse ; Linux or Mac
-      LinuxMac_ReturnDatePart(tm_sec, Value)
-    CompilerEndIf
+    CompilerSelect #PB_Compiler_OS
+      CompilerCase #PB_OS_Windows : Windows_ReturnDatePart(wSecond)
+      CompilerCase #PB_OS_Linux   : Linux_ReturnDatePart(tm_sec, Value)
+      CompilerCase #PB_OS_MacOS   : Mac_ReturnDatePart("s")
+    CompilerEndSelect
   EndProcedure
 
   Procedure.i DayOfWeek64(Date.q)
-    CompilerIf #PB_Compiler_OS = #PB_OS_Windows
-      Windows_ReturnDatePart(wDayOfWeek)
-    CompilerElse ; Linux or Mac
-      LinuxMac_ReturnDatePart(tm_wday, Value)
-    CompilerEndIf
+    CompilerSelect #PB_Compiler_OS
+      CompilerCase #PB_OS_Windows : Windows_ReturnDatePart(wDayOfWeek)
+      CompilerCase #PB_OS_Linux   : Linux_ReturnDatePart(tm_wday, Value)
+      CompilerCase #PB_OS_MacOS   : Mac_ReturnDatePart("E")
+    CompilerEndSelect
   EndProcedure
 
   Procedure.i DayOfYear64(Date.q)
-    CompilerIf #PB_Compiler_OS = #PB_OS_Windows
-      Protected.q TempDate
+    CompilerSelect #PB_Compiler_OS
 
-      TempDate = Date64(Year64(Date))
-      ProcedureReturn (Date - TempDate) / #SecondsInOneDay + 1
-    CompilerElse ; Linux or Mac
-      LinuxMac_ReturnDatePart(tm_yday, Value + 1)
-    CompilerEndIf
+      CompilerCase #PB_OS_Windows
+        Protected.q TempDate
+        TempDate = Date64(Year64(Date))
+        ProcedureReturn (Date - TempDate) / #SecondsInOneDay + 1
+
+      CompilerCase #PB_OS_Linux
+        Linux_ReturnDatePart(tm_yday, Value + 1)
+
+      CompilerCase #PB_OS_MacOS
+        Mac_ReturnDatePart("D")
+
+    CompilerEndSelect
   EndProcedure
 
   Procedure.q AddDate64(Date.q, Type.i, Value.i)
-    Protected.i Day, Month, Year
+    CompilerIf #PB_Compiler_OS = #PB_OS_MacOS
+      Protected at.d = Date - 978307200
 
-    Select Type
-      Case #PB_Date_Year:   ProcedureReturn Date64(Year64(Date) + Value, Month64(Date), Day64(Date), Hour64(Date), Minute64(Date), Second64(Date))
-      Case #PB_Date_Month
-        Day   = Day64(Date)
-        Month = Month64(Date) + Value
-        Year  = Year64(Date)
+      Select Type
+        Case #PB_Date_Year:   CFCalendarAddComponents(GregorianGMT, @at, 0, "y", Value)
+        Case #PB_Date_Month:  CFCalendarAddComponents(GregorianGMT, @at, 0, "M", Value)
+        Case #PB_Date_Week:   CFCalendarAddComponents(GregorianGMT, @at, 0, "d", Value * 7)
+        Case #PB_Date_Day:    CFCalendarAddComponents(GregorianGMT, @at, 0, "d", Value)
+        Case #PB_Date_Hour:   CFCalendarAddComponents(GregorianGMT, @at, 0, "H", Value)
+        Case #PB_Date_Minute: CFCalendarAddComponents(GregorianGMT, @at, 0, "m", Value)
+        Case #PB_Date_Second: CFCalendarAddComponents(GregorianGMT, @at, 0, "s", Value)
+      EndSelect
 
-        If Day > DaysInMonth64(Year, Month)
-          ; Mktime corrects the date unlike PB-AddDate it does
-          ; >> mktime:     31.03.2004 => 1 Monat später => 01.05.2004
-          ; >> PB-AddDate: 31.03.2004 => 1 Monat später => 30.04.2004
+      ProcedureReturn at + 978307200 
+    CompilerElse ; Windows or Linux
+      Protected.i Day, Month, Year
 
-          ; Set day to the maximum of the new month
-          Day = DaysInMonth64(Year, Month)
-        EndIf
+      Select Type
+        Case #PB_Date_Year:   ProcedureReturn Date64(Year64(Date) + Value, Month64(Date), Day64(Date), Hour64(Date), Minute64(Date), Second64(Date))
 
-        ProcedureReturn Date64(Year64(Date), Month, Day, Hour64(Date), Minute64(Date), Second64(Date))
-      Case #PB_Date_Week:   ProcedureReturn Date64(Year64(Date), Month64(Date), Day64(Date) + Value * 7, Hour64(Date), Minute64(Date), Second64(Date))
-      Case #PB_Date_Day:    ProcedureReturn Date64(Year64(Date), Month64(Date), Day64(Date) + Value, Hour64(Date), Minute64(Date), Second64(Date))
-      Case #PB_Date_Hour:   ProcedureReturn Date64(Year64(Date), Month64(Date), Day64(Date), Hour64(Date) + Value, Minute64(Date), Second64(Date))
-      Case #PB_Date_Minute: ProcedureReturn Date64(Year64(Date), Month64(Date), Day64(Date), Hour64(Date), Minute64(Date) + Value, Second64(Date))
-      Case #PB_Date_Second: ProcedureReturn Date64(Year64(Date), Month64(Date), Day64(Date), Hour64(Date), Minute64(Date), Second64(Date) + Value)
-    EndSelect
+        Case #PB_Date_Month
+          Day   = Day64(Date)
+          Month = Month64(Date) + Value
+          Year  = Year64(Date)
+
+          If Day > DaysInMonth64(Year, Month)
+            ; Mktime corrects the date unlike PB-AddDate it does
+            ; >> mktime:     31.03.2004 => 1 Monat später => 01.05.2004
+            ; >> PB-AddDate: 31.03.2004 => 1 Monat später => 30.04.2004
+
+            ; Set day to the maximum of the new month
+            Day = DaysInMonth64(Year, Month)
+          EndIf
+
+          ProcedureReturn Date64(Year64(Date), Month, Day, Hour64(Date), Minute64(Date), Second64(Date))
+
+        Case #PB_Date_Week:   ProcedureReturn Date64(Year64(Date), Month64(Date), Day64(Date) + Value * 7, Hour64(Date), Minute64(Date), Second64(Date))
+        Case #PB_Date_Day:    ProcedureReturn Date64(Year64(Date), Month64(Date), Day64(Date) + Value, Hour64(Date), Minute64(Date), Second64(Date))
+        Case #PB_Date_Hour:   ProcedureReturn Date64(Year64(Date), Month64(Date), Day64(Date), Hour64(Date) + Value, Minute64(Date), Second64(Date))
+        Case #PB_Date_Minute: ProcedureReturn Date64(Year64(Date), Month64(Date), Day64(Date), Hour64(Date), Minute64(Date) + Value, Second64(Date))
+        Case #PB_Date_Second: ProcedureReturn Date64(Year64(Date), Month64(Date), Day64(Date), Hour64(Date), Minute64(Date), Second64(Date) + Value)
+      EndSelect
+    CompilerEndIf
+
   EndProcedure
 
   Procedure.s FormatDate64(Mask$, Date.q)
@@ -396,18 +448,21 @@ Module Date64
 
       If MaskChar$ <> DateChar$
         If MaskChar$ = "%" ; Maybe a variable?
+
           If Mid(Mask$, i, 5) = "%yyyy"
             IsVariableFound = #True
             Year = Val(Mid(Date$, DatePos, 4))
             DatePos + 4 ; Skip the 4 numbers of the year
             i + 4       ; Skip the 5 characters of the variable "%yyyy"
             Continue
+
           ElseIf Mid(Mask$, i, 3) = "%yy"
             IsVariableFound = #True
             Year = Val(Mid(Date$, DatePos, 2))
             DatePos + 2 ; Skip the 2 numbers of the year
             i + 2       ; Skip the 3 characters of the variable "%yy"
             Continue
+
           EndIf
 
           ReadMaskVariable("%mm", Month)
@@ -419,9 +474,11 @@ Module Date64
           If Not IsVariableFound
             ProcedureReturn 0
           EndIf
+
         Else
           ProcedureReturn 0
         EndIf
+
       EndIf
 
       DatePos + 1
@@ -444,12 +501,14 @@ CompilerIf #PB_Compiler_IsMainFile
   Define   Date$, Date64$, Result64$
   
   Debug "Small compatibility test - error:"
+
   For Year = 1970 To 2037
     For Month = 1 To 12
       For Day = 1 To 28
         For Hour = 0 To 23
           ;For Minute = 0 To 59
           ;For Second = 0 To 59
+
           Date = Date(Year, Month, Day, Hour, Minute, Second)
           Date64 = Date64(Year, Month, Day, Hour, Minute, Second)
           
@@ -508,12 +567,15 @@ CompilerIf #PB_Compiler_IsMainFile
   EndIf
   
   Macro AddDateTest(Type, TypeS)
+    
     If AddDate(Date(), #PB_Date_#Type, 1) <> AddDate64(Date64(), #PB_Date_#Type, 1)
       Debug "AddDate(Date(), #PB_Date_" + TypeS + ", 1) <> AddDate64(Date64(), #PB_Date_" + TypeS + ", 1)"
     EndIf
+    
     If AddDate(Date(), #PB_Date_#Type, -1) <> AddDate64(Date64(), #PB_Date_#Type, -1)
       Debug "AddDate(Date(), #PB_Date_" + TypeS + ", -1) <> AddDate64(Date64(), #PB_Date_" + TypeS + ", -1)"
     EndIf
+    
   EndMacro
   
   AddDateTest(Year,   "Year")
@@ -525,6 +587,7 @@ CompilerIf #PB_Compiler_IsMainFile
   AddDateTest(Week,   "Week")
   
   Macro TestDateLimits(Minimum, Maximum)
+    
     Date64$ = Minimum
     Date64 = ParseDate64("%dd.%mm.%yyyy %hh:%ii:%ss", Date64$)
     Result64$ = FormatDate64("%dd.%mm.%yyyy %hh:%ii:%ss", Date64)
@@ -542,21 +605,27 @@ CompilerIf #PB_Compiler_IsMainFile
       Debug "> Expected was: " + Date64$
       Debug "> It was returned: " + Result64$
     EndIf
+    
   EndMacro
   
   Debug "---------------------"
   Debug "Test of date limits - error:"
+  
   CompilerSelect #PB_Compiler_OS
+      
     CompilerCase #PB_OS_Windows
       TestDateLimits("01.01.1601 00:00:00", "31.12.9999 23:59:59")
+      
     CompilerCase #PB_OS_Linux
       CompilerIf #PB_Compiler_Processor = #PB_Processor_x86
         TestDateLimits("01.01.1902 00:00:00", "18.01.2038 23:59:59")
       CompilerElse
         TestDateLimits("01.01.0000 00:00:00", "31.12.9999 23:59:59")
       CompilerEndIf
+      
     CompilerCase #PB_OS_MacOS
       TestDateLimits("31.12.1969 23:59:59", "31.12.9999 23:59:59")
+      
   CompilerEndSelect
   
   Debug "---------------------"
