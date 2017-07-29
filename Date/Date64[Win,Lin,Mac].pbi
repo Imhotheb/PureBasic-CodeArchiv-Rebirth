@@ -59,29 +59,29 @@ Module Date64
   #HundredNanosecondsInOneSecond               = 10000000
   #HundredNanosecondsFrom_1Jan1601_To_1Jan1970 = 116444736000000000
 
-  ;{ Struktur-Definition für "tm"
+  ;{ Structure definition for "tm"
   CompilerSelect #PB_Compiler_OS
     CompilerCase #PB_OS_Linux
       If Not Defined(tm, #PB_Structure)
         Structure tm Align #PB_Structure_AlignC
-          tm_sec.l    ; 0 bis 59 oder bis 60 bei Schaltsekunde
-          tm_min.l    ; 0 bis 59
-          tm_hour.l   ; 0 bis 23
-          tm_mday.l   ; Tag des Monats: 1 bis 31
-          tm_mon.l    ; Monat: 0 bis 11 (Monate seit Januar)
-          tm_year.l   ; Anzahl der Jahre seit dem Jahr 1900
-          tm_wday.l   ; Wochentag: 0 bis 6, 0 = Sonntag
-          tm_yday.l   ; Tage seit Jahresanfang: 0 bis 365 (365 ist also 366, da nach 1. Januar gezählt wird)
-          tm_isdst.l  ; Ist Sommerzeit? tm_isdst > 0 = Ja
-                      ;                             tm_isdst = 0 = Nein
-                      ;                             tm_isdst < 0 = Unbekannt
+          tm_sec.l    ; 0 to 59 or up to 60 at leap second
+          tm_min.l    ; 0 to 59
+          tm_hour.l   ; 0 to 23
+          tm_mday.l   ; Day of the month: 1 to 31
+          tm_mon.l    ; Month: 0 to 11 (0 = January)
+          tm_year.l   ; Number of years since the year 1900
+          tm_wday.l   ; Weekday: 0 to 6, 0 = Sunday
+          tm_yday.l   ; Days since the beginning of the year: 0 to 365 (365 is therefore 366 because after 1. January is counted)
+          tm_isdst.l  ; Is summer time? tm_isdst > 0 = Yes
+                      ;                             tm_isdst = 0 = No
+                      ;                             tm_isdst < 0 = Unknown
           CompilerIf #PB_Compiler_Processor = #PB_Processor_x86
-            tm_gmtoff.l ; Offset von UTC in Sekunden
-            *tm_zone    ; Abkürzungsname der Zeitzone
+            tm_gmtoff.l ; Offset of UTC in seconds
+            *tm_zone    ; Abbreviation of the time zone
           CompilerElse
-            tm_zone.l   ; Platzhalter
-            tm_gmtoff.l ; Offset von UTC in Sekunden
-            *tm_zone64  ; Abkürzungsname der Zeitzone
+            tm_zone.l   ; Placeholder
+            tm_gmtoff.l ; Offset of UTC in seconds
+            *tm_zone64  ; Abbreviation of the time zone
           CompilerEndIf
 
         EndStructure
@@ -89,20 +89,20 @@ Module Date64
     CompilerCase #PB_OS_MacOS
       If Not Defined(tm, #PB_Structure)
         Structure tm Align #PB_Structure_AlignC
-          tm_sec.l    ; 0 bis 59 oder bis 60 bei Schaltsekunde
-          tm_min.l    ; 0 bis 59
-          tm_hour.l   ; 0 bis 23
-          tm_mday.l   ; Tag des Monats: 1 bis 31
-          tm_mon.l    ; Monat: 0 bis 11 (Monate seit Januar)
-          tm_year.l   ; Anzahl der Jahre seit dem Jahr 1900
-          tm_wday.l   ; Wochentag: 0 bis 6, 0 = Sonntag
-          tm_yday.l   ; Tage seit Jahresanfang: 0 bis 365 (365 ist also 366, da nach 1. Januar gezählt wird)
-          tm_isdst.l  ; Ist Sommerzeit? tm_isdst > 0 = Ja
-                      ;                             tm_isdst = 0 = Nein
-                      ;                             tm_isdst < 0 = Unbekannt
-          tm_zone.l   ; Abkürzungsname der Zeitzone (Auch bei 64bit ein 32bit Wert)
-          tm_gmtoff.l ; Offset von UTC in Sekunden
-          *tm_zone64  ; Abkürzungsname der Zeitzone
+          tm_sec.l    ; 0 to 59 or up to 60 at leap second
+          tm_min.l    ; 0 to 59
+          tm_hour.l   ; 0 to 23
+          tm_mday.l   ; Day of the month: 1 to 31
+          tm_mon.l    ; Month: 0 to 11 (0 = Januar)
+          tm_year.l   ; Number of years since the year 1900
+          tm_wday.l   ; Weekday: 0 to 6, 0 = Sunday
+          tm_yday.l   ; Days since the beginning of the year: 0 to 365 (365 is therefore 366 because after 1. January is counted)
+          tm_isdst.l  ; Is summer time? tm_isdst > 0 = Yes
+                      ;                             tm_isdst = 0 = No
+                      ;                             tm_isdst < 0 = Unknown
+          tm_zone.l   ; Abbreviation of the time zone (On a 64bit system it is also a 32bit value)
+          tm_gmtoff.l ; Offset of UTC in seconds
+          *tm_zone64  ; Abbreviation of the time zone
         EndStructure
       EndIf
   CompilerEndSelect
@@ -110,12 +110,12 @@ Module Date64
 
   Procedure.i IsLeapYear64(Year.i)
     If Year < 1600
-      ; vor dem Jahr 1600 sind alle Jahre Schaltjahre, die durch 4 restlos teilbar sind
+      ; Every year before 1600 are leap years if they are divisible by 4 with no remainder
       ProcedureReturn Bool(Year % 4 = 0)
     Else
-      ; ab dem Jahr 1600 sind alle Jahre Schaltjahre, die folgende Bedingungen erfüllen:
-      ; => restlos durch 4 teilbar, jedoch nicht restlos durch 100 teilbar
-      ; => restlos durch 400 teilbar
+      ; From the year 1600 are all year leap years that meet the following conditions:
+      ; => Can be divided by 4 without remainder, but can not be divided by 100 without remainder
+      ; => Divisible by 400 without remainder
       ProcedureReturn Bool((Year % 4 = 0 And Year % 100 <> 0) Or Year % 400 = 0)
     EndIf
   EndProcedure
@@ -136,7 +136,7 @@ Module Date64
     Select Month
       Case 1, 3, 5, 7, 8, 10, 12: ProcedureReturn 31
       Case 4, 6, 9, 11:           ProcedureReturn 30
-      Case 2:                     ProcedureReturn 28 + IsLeapYear64(Year) ; Februar hat im Schaltjahr ein Tag mehr
+      Case 2:                     ProcedureReturn 28 + IsLeapYear64(Year) ; February has one more day in the leap year
     EndSelect
   EndProcedure
 
@@ -146,9 +146,9 @@ Module Date64
       Protected.FILETIME   ft, ft2
       Protected.i          DaysInMonth
 
-      If Year > -1 ; Gültiges Datum
+      If Year > -1 ; Valid date
 
-        ; Angaben evtl. korrigieren
+        ; Correct the data, if necessary
 
         Minute + Second/60
         Second % 60
@@ -206,43 +206,43 @@ Module Date64
         st\wMinute = Minute
         st\wSecond = Second
 
-        ; Konvertiert Systemzeit (UTC) zu Dateizeit (UTC)
+        ; Convert system time (UTC) to file time (UTC)
         SystemTimeToFileTime_(@st, @ft)
 
-        ; UTC-Zeit in Sekunden umrechnen
+        ; Convert UTC time to seconds
         ProcedureReturn (PeekQ(@ft) - #HundredNanosecondsFrom_1Jan1601_To_1Jan1970) / #HundredNanosecondsInOneSecond
       Else
-        ; Kein gültiges Datum. Lokale Systemzeit wird ermittelt
+        ; No valid date. Local system time is determined
         GetLocalTime_(@st)
-        SystemTimeToFileTime_(@st, @ft) ; "st" wird als UTC gelesen und zu Dateizeit konvertiert
+        SystemTimeToFileTime_(@st, @ft) ; "st" is read as UTC and convert to file time
 
-        ; UTC-Zeit in Sekunden umrechnen
+        ; Convert UTC time to seconds
         ProcedureReturn (PeekQ(@ft) - #HundredNanosecondsFrom_1Jan1601_To_1Jan1970) / #HundredNanosecondsInOneSecond
       EndIf
-    CompilerElse ; Linux oder Mac
+    CompilerElse ; Linux or Mac
       Protected.tm tm
       Protected.q time
 
-      If Year > -1 ; Gültiges Datum
-        tm\tm_year  = Year - 1900 ; Jahre ab 1900
-        tm\tm_mon   = Month - 1   ; Monate ab Januar
+      If Year > -1 ; Valid date
+        tm\tm_year  = Year - 1900 ; Years from 1900
+        tm\tm_mon   = Month - 1   ; Months from January
         tm\tm_mday  = Day
         tm\tm_hour  = Hour
         tm\tm_min   = Minute
         tm\tm_sec   = Second
 
-        ; mktime korrigiert die Angaben selber und liefert bereits Sekunden
-        time = timegm_(@tm) ; Konvertiert UTC-Zeit zu UTC-Zeit
+        ; mktime corrects the data itself and delivers seconds
+        time = timegm_(@tm) ; Convert structured UTC time to UTC time as seconds
 
-        ProcedureReturn time ; UTC-Zeit in Sekunden
+        ProcedureReturn time ; UTC time in seconds
       Else
-        ; Kein gültiges Datum. Systemzeit wird ermittelt
+        ; No valid date. Local system time is determined
         time = time_(0)
         If localtime_r_(@time, @tm) <> 0
           time = timegm_(@tm)
         EndIf
 
-        ProcedureReturn time  ; UTC-Zeit in Sekunden
+        ProcedureReturn time  ; UTC time in seconds
       EndIf
     CompilerEndIf
   EndProcedure
@@ -270,7 +270,7 @@ Module Date64
   Procedure.i Year64(Date.q)
     CompilerIf #PB_Compiler_OS = #PB_OS_Windows
       Windows_ReturnDatePart(wYear)
-    CompilerElse ; Linux oder Mac
+    CompilerElse ; Linux or Mac
       LinuxMac_ReturnDatePart(tm_year, Value + 1900)
     CompilerEndIf
   EndProcedure
@@ -278,7 +278,7 @@ Module Date64
   Procedure.i Month64(Date.q)
     CompilerIf #PB_Compiler_OS = #PB_OS_Windows
       Windows_ReturnDatePart(wMonth)
-    CompilerElse ; Linux oder Mac
+    CompilerElse ; Linux or Mac
       LinuxMac_ReturnDatePart(tm_mon, Value + 1)
     CompilerEndIf
   EndProcedure
@@ -286,7 +286,7 @@ Module Date64
   Procedure.i Day64(Date.q)
     CompilerIf #PB_Compiler_OS = #PB_OS_Windows
       Windows_ReturnDatePart(wDay)
-    CompilerElse ; Linux oder Mac
+    CompilerElse ; Linux or Mac
       LinuxMac_ReturnDatePart(tm_mday, Value)
     CompilerEndIf
   EndProcedure
@@ -294,7 +294,7 @@ Module Date64
   Procedure.i Hour64(Date.q)
     CompilerIf #PB_Compiler_OS = #PB_OS_Windows
       Windows_ReturnDatePart(wHour)
-    CompilerElse ; Linux oder Mac
+    CompilerElse ; Linux or Mac
       LinuxMac_ReturnDatePart(tm_hour, Value)
     CompilerEndIf
   EndProcedure
@@ -302,7 +302,7 @@ Module Date64
   Procedure.i Minute64(Date.q)
     CompilerIf #PB_Compiler_OS = #PB_OS_Windows
       Windows_ReturnDatePart(wMinute)
-    CompilerElse ; Linux oder Mac
+    CompilerElse ; Linux or Mac
       LinuxMac_ReturnDatePart(tm_min, Value)
     CompilerEndIf
   EndProcedure
@@ -310,7 +310,7 @@ Module Date64
   Procedure.i Second64(Date.q)
     CompilerIf #PB_Compiler_OS = #PB_OS_Windows
       Windows_ReturnDatePart(wSecond)
-    CompilerElse ; Linux oder Mac
+    CompilerElse ; Linux or Mac
       LinuxMac_ReturnDatePart(tm_sec, Value)
     CompilerEndIf
   EndProcedure
@@ -318,7 +318,7 @@ Module Date64
   Procedure.i DayOfWeek64(Date.q)
     CompilerIf #PB_Compiler_OS = #PB_OS_Windows
       Windows_ReturnDatePart(wDayOfWeek)
-    CompilerElse ; Linux oder Mac
+    CompilerElse ; Linux or Mac
       LinuxMac_ReturnDatePart(tm_wday, Value)
     CompilerEndIf
   EndProcedure
@@ -329,7 +329,7 @@ Module Date64
 
       TempDate = Date64(Year64(Date))
       ProcedureReturn (Date - TempDate) / #SecondsInOneDay + 1
-    CompilerElse ; Linux oder Mac
+    CompilerElse ; Linux or Mac
       LinuxMac_ReturnDatePart(tm_yday, Value + 1)
     CompilerEndIf
   EndProcedure
@@ -345,11 +345,11 @@ Module Date64
         Year  = Year64(Date)
 
         If Day > DaysInMonth64(Year, Month)
-          ; mktime korrigiert das zwar auch, wendet dabei aber eine andere Methode als PB-AddDate an:
+          ; Mktime corrects the date unlike PB-AddDate it does
           ; >> mktime:     31.03.2004 => 1 Monat später => 01.05.2004
           ; >> PB-AddDate: 31.03.2004 => 1 Monat später => 30.04.2004
 
-          ; Setzte Tag auf das Maximum des neuen Monats
+          ; Set day to the maximum of the new month
           Day = DaysInMonth64(Year, Month)
         EndIf
 
@@ -380,8 +380,8 @@ Module Date64
     If Mid(Mask$, i, 3) = MaskVariable
       IsVariableFound = #True
       ReturnVariable = Val(Mid(Date$, DatePos, 2))
-      DatePos + 2 ; Die 2 Nummern der Zahl überspringen
-      i + 2       ; Die 3 Zeichen der Variable überspringen
+      DatePos + 2 ; Skip the 2 numbers of the number
+      i + 2       ; Skip the 3 characters of the variable
       Continue
     EndIf
   EndMacro
@@ -395,18 +395,18 @@ Module Date64
       DateChar$ = Mid(Date$, DatePos, 1)
 
       If MaskChar$ <> DateChar$
-        If MaskChar$ = "%" ; Vielleicht eine Variable?
+        If MaskChar$ = "%" ; Maybe a variable?
           If Mid(Mask$, i, 5) = "%yyyy"
             IsVariableFound = #True
             Year = Val(Mid(Date$, DatePos, 4))
-            DatePos + 4 ; Die 4 Nummern der Jahreszahl überspringen
-            i + 4       ; Die 5 Zeichen der Variable "%yyyy" überspringen
+            DatePos + 4 ; Skip the 4 numbers of the year
+            i + 4       ; Skip the 5 characters of the variable "%yyyy"
             Continue
           ElseIf Mid(Mask$, i, 3) = "%yy"
             IsVariableFound = #True
             Year = Val(Mid(Date$, DatePos, 2))
-            DatePos + 2 ; Die 2 Nummern der Jahreszahl überspringen
-            i + 2       ; Die 3 Zeichen der Variable "%yy" überspringen
+            DatePos + 2 ; Skip the 2 numbers of the year
+            i + 2       ; Skip the 3 characters of the variable "%yy"
             Continue
           EndIf
 
@@ -443,7 +443,7 @@ CompilerIf #PB_Compiler_IsMainFile
   Define.q Date, Date64
   Define   Date$, Date64$, Result64$
   
-  Debug "Kleiner Kompatibilitäts-Test - Fehler:"
+  Debug "Small compatibility test - error:"
   For Year = 1970 To 2037
     For Month = 1 To 12
       For Day = 1 To 28
@@ -529,23 +529,23 @@ CompilerIf #PB_Compiler_IsMainFile
     Date64 = ParseDate64("%dd.%mm.%yyyy %hh:%ii:%ss", Date64$)
     Result64$ = FormatDate64("%dd.%mm.%yyyy %hh:%ii:%ss", Date64)
     If Date64$ <> Result64$
-      Debug "Minimum stimmt nicht:"
-      Debug "> Erwartet wurde: " + Date64$
-      Debug "> Zurückgegeben wurde: " + Result64$
+      Debug "Minimum is wrong:"
+      Debug "> Expected was: " + Date64$
+      Debug "> It was returned: " + Result64$
     EndIf
     
     Date64$ = Maximum
     Date64 = ParseDate64("%dd.%mm.%yyyy %hh:%ii:%ss", Date64$)
     Result64$ = FormatDate64("%dd.%mm.%yyyy %hh:%ii:%ss", Date64)
     If Date64$ <> Result64$
-      Debug "Maximum stimmt nicht:"
-      Debug "> Erwartet wurde: " + Date64$
-      Debug "> Zurückgegeben wurde: " + Result64$
+      Debug "Maximum is wrong:"
+      Debug "> Expected was: " + Date64$
+      Debug "> It was returned: " + Result64$
     EndIf
   EndMacro
   
   Debug "---------------------"
-  Debug "Test der Datum-Grenzen - Fehler:"
+  Debug "Test of date limits - error:"
   CompilerSelect #PB_Compiler_OS
     CompilerCase #PB_OS_Windows
       TestDateLimits("01.01.1601 00:00:00", "31.12.9999 23:59:59")
@@ -560,5 +560,5 @@ CompilerIf #PB_Compiler_IsMainFile
   CompilerEndSelect
   
   Debug "---------------------"
-  Debug "Test wurde durchgeführt"
+  Debug "Test was carried out"
 CompilerEndIf
