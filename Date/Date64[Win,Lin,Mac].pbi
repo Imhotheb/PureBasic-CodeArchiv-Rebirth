@@ -30,6 +30,12 @@ Module Date64
   CompilerIf #PB_Compiler_OS = #PB_OS_MacOS And #PB_Compiler_Processor = #PB_Processor_x86
     CompilerError "32-Bit not supported on MacOS"
   CompilerEndIf
+  
+  ; !!! >>> WARNUNG <<< !!!
+  ; Der gregorianische Kalender wurde in vielen Gebieten zu unterschiedlichen Zeiten eingeführt.
+  ; Dieses Modul verwendet die API-Datumsfunktionen des Betriebssystems und diese haben eine
+  ; vereinheitlichte Einführungszeit einprogrammiert, wodurch Datumsberechnungen vor Einführung
+  ; des gregorianischen Kalenders meistens falsche Ergebnisse liefern.
 
   ; == Windows ==
   ; >> Minimum: 01.01.1601 00:00:00
