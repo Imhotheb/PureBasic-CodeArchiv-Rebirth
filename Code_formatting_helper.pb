@@ -1,6 +1,6 @@
 ﻿;   Description: A PB tool that helps to format codes for the CodeArchive
 ;        Author: Sicro
-;          Date: 2017-06-04
+;          Date: 2017-08-02
 ;            OS: Windows, Linux, Mac
 ; English-Forum: 
 ;  French-Forum: 
@@ -37,7 +37,6 @@ Runtime Enumeration Gadget
   #String_EnglishForum
   #String_FrenchForum
   #String_GermanForum
-  #String_PostDate
 
   #CheckBox_NeedsThreadSafe
   #CheckBox_Only_x86_Systems
@@ -96,10 +95,6 @@ XML$ = "<window id='#Window_Main' name='Window_Main' text='CodeArchiv - " + #Pro
        "      <string id='#String_GermanForum'/>" + #CRLF$ +
        "    </hbox>" + #CRLF$ +
        "    <hbox expand='item:2'>" + #CRLF$ +
-       "      <text text='Post date:' width='100'/>" + #CRLF$ +
-       "      <string id='#String_PostDate' text='yyyy-mm-dd'/>" + #CRLF$ +
-       "    </hbox>" + #CRLF$ +
-       "    <hbox expand='item:2'>" + #CRLF$ +
        "      <text text='Code limitations:' width='100'/>" + #CRLF$ +
        "      <hbox>" + #CRLF$ +
        "        <gridbox columns='3'>" + #CRLF$ +
@@ -145,7 +140,7 @@ Repeat
     ; Set main informations
     Code$ = ";   Description: " + Trim(GetGadgetText(#String_Description)) + #CRLF$ +
             ";        Author: " + Trim(GetGadgetText(#String_Author)) + #CRLF$ +
-            ";          Date: " + GetGadgetText(#String_PostDate) + #CRLF$ +
+            ";          Date: " + FormatDate("%yyyy-%mm-%dd", Date()) + #CRLF$ +
             ";            OS: "
     If GetGadgetState(#CheckBox_Windows) : Supported_OS$ + "|Windows|" : EndIf
     If GetGadgetState(#CheckBox_Linux)   : Supported_OS$ + "|Linux|"   : EndIf
