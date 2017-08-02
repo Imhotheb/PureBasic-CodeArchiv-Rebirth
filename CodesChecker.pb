@@ -1,6 +1,6 @@
 ﻿;   Description: A PB tool that helps to check codes from the CodeArchive
 ;        Author: Sicro
-;          Date: 2017-06-04
+;          Date: 2017-08-02
 ;            OS: Windows, Linux, Mac
 ; English-Forum: Not in the forum
 ;  French-Forum: Not in the forum
@@ -116,20 +116,20 @@ Procedure.i GetCodeHeaderInfos(CodePath$, *CodeHeaderInfos.CodeHeaderInfos_Struc
   While Not Eof(File)
     String$ = ReadString(File, StringFormat)
     With *CodeHeaderInfos
-      If Left(String$,                Len(";   Description: ")) = ";   Description: "
-        \Description$ = Mid(String$,  Len(";   Description: ") + 1)
-      ElseIf Left(String$,            Len(";        Author: ")) = ";        Author: "
-        \Author$ = Mid(String$,       Len(";        Author: ") + 1)
-      ElseIf Left(String$,            Len(";          Date: ")) = ";          Date: "
-        \Date$ = Mid(String$,         Len(";          Date: ") + 1)
-      ElseIf Left(String$,            Len(";            OS: ")) = ";            OS: "
-        \OS$ = Mid(String$,           Len(";            OS: ") + 1)
-      ElseIf Left(String$,            Len("; English-Forum: ")) = "; English-Forum: "
-        \EnglishForum$ = Mid(String$, Len("; English-Forum: ") + 1)
-      ElseIf Left(String$,            Len(";  French-Forum: ")) = ";  French-Forum: "
-        \FrenchForum$ = Mid(String$,  Len(";  French-Forum: ") + 1)
-      ElseIf Left(String$,            Len(";  German-Forum: ")) = ";  German-Forum: "
-        \GermanForum$ = Mid(String$,  Len(";  German-Forum: ") + 1)
+      If Left(String$,                     Len(";   Description:")) = ";   Description:"
+        \Description$ = Trim(Mid(String$,  Len(";   Description:") + 1))
+      ElseIf Left(String$,                 Len(";        Author:")) = ";        Author:"
+        \Author$ = Trim(Mid(String$,       Len(";        Author:") + 1))
+      ElseIf Left(String$,                 Len(";          Date:")) = ";          Date:"
+        \Date$ = Trim(Mid(String$,         Len(";          Date:") + 1))
+      ElseIf Left(String$,                 Len(";            OS:")) = ";            OS:"
+        \OS$ = Trim(Mid(String$,           Len(";            OS:") + 1))
+      ElseIf Left(String$,                 Len("; English-Forum:")) = "; English-Forum:"
+        \EnglishForum$ = Trim(Mid(String$, Len("; English-Forum:") + 1))
+      ElseIf Left(String$,                 Len(";  French-Forum:")) = ";  French-Forum:"
+        \FrenchForum$ = Trim(Mid(String$,  Len(";  French-Forum:") + 1))
+      ElseIf Left(String$,                 Len(";  German-Forum:")) = ";  German-Forum:"
+        \GermanForum$ = Trim(Mid(String$,  Len(";  German-Forum:") + 1))
       EndIf
     EndWith
   Wend

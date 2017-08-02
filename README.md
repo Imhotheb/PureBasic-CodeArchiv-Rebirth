@@ -27,7 +27,7 @@
   * If the code supports all OS, ignore the step above
   * Instead of inserting a header into the code files, create a new text file named "CodeInfo.txt"
     and insert it into the new directory. Please be sure to use the "CodeInfo.txt" file from the
-    "repo-dev" branch and be careful not to delete the contained blanks and only write one-line
+    "repo-dev" branch and be careful to only write one-line
 * Use the "CodesCleaner" from the "repo-dev" branch to automatically remove unimportant or
   disruptive content from the codes
 * Use the "CodesChecker" from the "repo-dev" branch to automatically check the code files for
