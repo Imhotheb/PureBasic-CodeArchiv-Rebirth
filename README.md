@@ -3,7 +3,7 @@
 ## Rules of commits
 * Always use as the first word of the commit message: Fix, Add, Update, Remove, Change
 * Commit message must not exceed one line
-* Commit message must not exceed 50 characters
+* Commit message must not exceed 71 characters
 * Commit message must describe the change (only "Update", "Fix" etc. is not helpful to recognize
   what the commit is doing)
 * If it is necessary to describe the change better:
